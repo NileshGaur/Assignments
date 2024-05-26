@@ -94,14 +94,6 @@ body {
 .login-link a:hover {
   text-decoration: underline;
 }
-
-.footer {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  font-style: italic;
-}
-
 /* Mobile styles */
 
 @media (max-width: 600px) {
