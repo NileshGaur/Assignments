@@ -70,6 +70,7 @@ const cards = async () => {
     cardText = cardText.replace("$cardTitle$", title);
     cardText = cardText.replace("$cardDescription$", description);
     cardText = cardText.replace("$imageSrc$", image);
+    cardText = cardText.replace("$Link$", `/details?id=${ele.id}`);
 
     return cardText;
   });
@@ -87,6 +88,29 @@ const productsPageResponse = async (res) => {
   const data = await fsPromises.readFile("./pages/productsPage.html", "utf-8");
   const productPageHtml = data.replace("#root#", cardText);
   res.end(productPageHtml);
+};
+
+const detailsPageResponse = async (res, id) => {
+  console.log(id);
+  const productsText = await fsPromises.readFile("./data.json", "utf-8");
+  const products = JSON.parse(productsText);
+  const product = products.find((ele) => ele.id === parseInt(id));
+
+  if (product) {
+    let data = await fsPromises.readFile(
+      "./pages/productDetails.html",
+      "utf-8"
+    );
+    data = data.replace("$Title$", product.title);
+    data = data.replace("$description$", product.description);
+    data = data.replace("$image$", product.thumbnail);
+    data = data.replace("$Price$", product.price);
+
+    const productDetailsHtml = data;
+    res.end(productDetailsHtml);
+  } else {
+    res.end("Product not found");
+  }
 };
 
 const app = http.createServer((req, res) => {
@@ -109,6 +133,10 @@ const app = http.createServer((req, res) => {
     }
     case "/products": {
       productsPageResponse(res);
+      break;
+    }
+    case "/details": {
+      detailsPageResponse(res, query.id);
       break;
     }
     default: {
