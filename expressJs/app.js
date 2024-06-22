@@ -21,6 +21,7 @@ app.get("/products", async (req, res) => {
       data: product,
     },
   });
+  return;
 });
 
 app.post("/products", async (req, res) => {
@@ -39,6 +40,7 @@ app.post("/products", async (req, res) => {
 
   const product = await fsPromises.readFile("./data.json", "utf-8");
   try {
+    // try-catch block to handle the case when the data.json file is empty
     productsArray = JSON.parse(product);
   } catch (error) {
     productsArray = [];
@@ -63,6 +65,14 @@ app.put("/products/:id", async (req, res) => {
   const id = req.params.id;
   const body = req.body;
 
+  if (!body.title || !body.price) {
+    res.status(400);
+    res.json({
+      status: "error",
+      message: "Please provide title and price",
+    });
+  }
+
   let productsArray = [];
 
   try {
@@ -77,7 +87,7 @@ app.put("/products/:id", async (req, res) => {
 
   if (productIndex !== -1) {
     productsArray[productIndex] = {
-      ...productsArray[productIndex],
+      id: productsArray[productIndex].id,
       ...body,
     };
     await fsPromises.writeFile("./data.json", JSON.stringify(productsArray));
@@ -85,6 +95,42 @@ app.put("/products/:id", async (req, res) => {
       status: "Updated",
       data: {
         data: productsArray[productIndex],
+      },
+    });
+  } else {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+  }
+});
+
+app.patch("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  let productsArray = [];
+
+  try {
+    const product = await fsPromises.readFile("./data.json", "utf-8");
+    productsArray = JSON.parse(product);
+  } catch (error) {
+    console.log(error);
+    productsArray = [];
+  }
+
+  const productIdx = productsArray.findIndex((ele) => ele.id == id);
+
+  if (productIdx !== -1) {
+    productsArray[productIdx] = {
+      ...productsArray[productIdx],
+      ...body,
+    };
+
+    await fsPromises.writeFile("./data.json", JSON.stringify(productsArray));
+    res.status(200).json({
+      status: "Updated",
+      data: {
+        data: productsArray[productIdx],
       },
     });
   } else {

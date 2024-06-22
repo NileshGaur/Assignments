@@ -237,3 +237,9 @@ Request URL: /favicon.ico  2024-06-16T11:14:44.693Z
 Request URL: /details?id=2  2024-06-16T11:14:46.788Z
 Request URL: /favicon.ico  2024-06-16T11:14:46.809Z
 Request URL: /favicon.ico  2024-06-16T11:14:59.806Z
+Request URL: /  2024-06-22T11:34:08.661Z
+Request URL: /favicon.ico  2024-06-22T11:34:10.173Z
+Request URL: /products  2024-06-22T11:34:13.531Z
+Request URL: /favicon.ico  2024-06-22T11:34:14.014Z
+Request URL: /details?id=1  2024-06-22T11:34:15.997Z
+Request URL: /favicon.ico  2024-06-22T11:34:16.055Z
