@@ -5,12 +5,15 @@ const {
   deleteProduct,
   patchProduct,
   getSingleProduct,
+  searchProduct,
 } = require("../controllers/productController");
 
 const express = require("express");
 const productRouter = express.Router();
 
 productRouter.route("/").get(getProduct).post(postProduct);
+
+productRouter.route("/search").get(searchProduct);
 
 productRouter
   .route("/:id")

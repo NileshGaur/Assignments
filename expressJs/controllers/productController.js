@@ -40,6 +40,36 @@ const getSingleProduct = async (req, res) => {
   });
 };
 
+const searchProduct = async (req, res) => {
+  const { query } = req.query;
+  let productsArray = [];
+
+  console.log(query);
+
+  try {
+    const products = await fsPromises.readFile("./data.json", "utf-8");
+    productsArray = JSON.parse(products);
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: "Could not read products",
+    });
+  }
+
+  if (query) {
+    productsArray = productsArray.filter((products) =>
+      products.title.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  res.json({
+    status: "success",
+    data: {
+      data: productsArray,
+    },
+  });
+};
+
 const postProduct = async (req, res) => {
   const body = req.body;
 
@@ -196,4 +226,5 @@ module.exports = {
   putProduct,
   deleteProduct,
   patchProduct,
+  searchProduct,
 };
