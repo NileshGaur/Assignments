@@ -1,3 +1,5 @@
+const fsPromises = require("fs").promises;
+
 const getProduct = async (req, res) => {
   const data = await fsPromises.readFile("./data.json", "utf-8");
   const product = JSON.parse(data);
@@ -8,6 +10,34 @@ const getProduct = async (req, res) => {
     },
   });
   return;
+};
+
+const getSingleProduct = async (req, res) => {
+  const { id } = req.params;
+  let productsArray = [];
+
+  try {
+    const products = await fsPromises.readFile("./data.json", "utf-8");
+    productsArray = JSON.parse(products);
+  } catch (error) {
+    productsArray = [];
+  }
+
+  const idx = productsArray.findIndex((ele) => ele.id == id);
+
+  if (idx === -1) {
+    return res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+  }
+
+  res.json({
+    status: "success",
+    data: {
+      data: productsArray[idx],
+    },
+  });
 };
 
 const postProduct = async (req, res) => {
@@ -161,6 +191,7 @@ const patchProduct = async (req, res) => {
 
 module.exports = {
   getProduct,
+  getSingleProduct,
   postProduct,
   putProduct,
   deleteProduct,
