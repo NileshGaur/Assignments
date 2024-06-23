@@ -44,8 +44,6 @@ const searchProduct = async (req, res) => {
   const { query } = req.query;
   let productsArray = [];
 
-  console.log(query);
-
   try {
     const products = await fsPromises.readFile("./data.json", "utf-8");
     productsArray = JSON.parse(products);
@@ -67,6 +65,39 @@ const searchProduct = async (req, res) => {
     data: {
       data: productsArray,
     },
+  });
+};
+const filterProductByPrice = async (req, res) => {
+  let { minPrice, maxPrice } = req.query;
+
+  minPrice = parseInt(minPrice);
+  maxPrice = parseInt(maxPrice);
+
+  if (isNaN(minPrice) || isNaN(maxPrice)) {
+    return res.status(400).json({
+      status: "error",
+      message: "Please provide a valid range",
+    });
+  }
+
+  let productsArray = [];
+
+  try {
+    const products = await fsPromises.readFile("./data.json", "utf8");
+    productsArray = JSON.parse(products);
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: "Error Reading Products",
+    });
+  }
+
+  const filteredProducts = productsArray.filter(
+    (ele) => ele.price >= minPrice && ele.price <= maxPrice
+  );
+  res.json({
+    status: "success",
+    data: filteredProducts,
   });
 };
 
@@ -227,4 +258,5 @@ module.exports = {
   deleteProduct,
   patchProduct,
   searchProduct,
+  filterProductByPrice,
 };
