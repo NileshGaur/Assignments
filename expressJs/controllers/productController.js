@@ -1,4 +1,4 @@
-const fsPromises = require("fs").promises;
+const fsPromises = require("fs/promises");
 
 const getProduct = async (req, res) => {
   const data = await fsPromises.readFile("./data.json", "utf-8");
@@ -98,6 +98,50 @@ const filterProductByPrice = async (req, res) => {
   res.json({
     status: "success",
     data: filteredProducts,
+  });
+};
+
+const sortProductsByPrice = async (req, res) => {
+  let { order } = req.query;
+
+  console.log(order);
+
+  if (!order) {
+    return res.status(400).json({
+      status: "error",
+      message: "Please provide an order (asc or desc)",
+    });
+  }
+
+  let productsArray = [];
+  order = order.toLowerCase();
+
+  try {
+    const products = await fsPromises.readFile("./data.json", "utf-8");
+    productsArray = JSON.parse(products);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Error reading products",
+    });
+  }
+
+  if (order === "asc") {
+    productsArray.sort((a, b) => a.price - b.price);
+  } else if (order === "desc") {
+    productsArray.sort((a, b) => b.price - a.price);
+  } else {
+    return res.status(400).json({
+      status: "error",
+      message: "Please provide a valid order",
+    });
+  }
+  res.json({
+    status: "success",
+    data: {
+      data: productsArray,
+    },
   });
 };
 
@@ -259,4 +303,5 @@ module.exports = {
   patchProduct,
   searchProduct,
   filterProductByPrice,
+  sortProductsByPrice,
 };
