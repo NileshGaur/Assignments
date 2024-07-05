@@ -1,4 +1,29 @@
 const productModel = require("./../models/productModels");
+const mongoose = require("mongoose");
+
+const validateID = async (req, res, next) => {
+  const { id } = req.params;
+
+  //validate if the id is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid ID format",
+    });
+  }
+
+  const product = await productModel.findById(id);
+
+  if (!product) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  }
+
+  next();
+};
 
 const getProducts = async (req, res) => {
   try {
@@ -9,7 +34,7 @@ const getProducts = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.json({
+    res.status(500).json({
       status: "error",
       message: error.message,
     });
@@ -26,7 +51,54 @@ const createProduct = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.json({
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+const replaceProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const replacedProduct = await productModel.findOneAndReplace(
+      { _id: id },
+      body,
+      { returnDocument: "after" }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: replacedProduct,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+const updateProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+
+    body.updatedAt = Date.now();
+
+    const updatedProduct = await productModel.findOneAndUpdate(
+      { _id: id },
+      body,
+      { returnDocument: "after" }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: updatedProduct,
+    });
+  } catch (err) {
+    res.status(500).json({
       status: "error",
       message: err.message,
     });
@@ -64,4 +136,7 @@ module.exports = {
   getProducts,
   createProduct,
   deleteProduct,
+  replaceProducts,
+  updateProducts,
+  validateID,
 };
