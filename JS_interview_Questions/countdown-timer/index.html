@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <title>Countdown Timer</title>
+  </head>
+  <body>
+    <div class="container">
+      <span class="containerTitle"> Countdown Timer </span>
+      <br />
+      <div class="containerLabels">
+        <p class="containerLabel">Hours</p>
+        <p class="containerLabel">Minutes</p>
+        <p class="containerLabel">Seconds</p>
+      </div>
+      <div class="containerInputs">
+        <input
+          type="number"
+          maxlength="2"
+          oninput="this.value = this.value.slice(0,2)"
+          class="containerInput hour"
+          placeholder="00"
+        />
+        <p class="colon">:</p>
+        <input
+          type="number"
+          maxlength="2"
+          oninput="this.value = this.value.slice(0,2)"
+          class="containerInput minute"
+          placeholder="00"
+        />
+        <p class="colon">:</p>
+        <input
+          type="number"
+          maxlength="2"
+          oninput="this.value = this.value.slice(0,2)"
+          class="containerInput second"
+          placeholder="00"
+        />
+      </div>
+      <div class="containerButtons">
+        <button class="btn start">Start</button>
+        <button class="btn stop">Stop</button>
+        <button class="btn reset">Reset</button>
+      </div>
+      <div class="doom"><h1>YOU ARE DOOMED</h1></div>
+    </div>
+  </body>
+</html>

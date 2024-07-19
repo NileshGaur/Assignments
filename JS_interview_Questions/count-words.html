@@ -1,0 +1,33 @@
+<!-- count number of words from the text box input and display it in the div below -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question 1</title>
+  </head>
+  <body>
+    <h1>Enter the text below</h1>
+    <textarea
+      name="text"
+      id="text"
+      cols="70"
+      rows="10"
+      placeholder="Enter the text here"
+    ></textarea>
+    <br />
+    <button onclick="countWords()">Count Words</button>
+    <div id="result"></div>
+    <script>
+      function countWords() {
+        let text = document.getElementById("text").value.trim();
+        const words = text.split(" ");
+        const wordCount = text.length ? words.length : 0;
+        document.getElementById(
+          "result"
+        ).innerHTML = `Number of words: ${wordCount}`;
+      }
+    </script>
+  </body>
+</html>
