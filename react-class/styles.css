@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  background-color: bisque;
+  text-align: center;
+  padding: 12px;
+}
+
+h1 {
+  padding: 16px;
+  background-color: aquamarine;
+  text-align: center;
+}
+
+.product-ad-card-container {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background-color: antiquewhite;
+}
+
+.product-ad-card {
+  flex-basis: 25%;
+  padding: 16px;
+  background-color: white;
+}
+.product-ad-card > h4 {
+  margin-bottom: 8px;
+}
+
+.product-item-parent-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.product-item > img {
+  width: 100%;
+  height: auto;
+}
